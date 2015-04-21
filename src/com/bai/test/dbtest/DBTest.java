@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
 public class DBTest extends ActionBarActivity {
+	private static final String TAG = "DBTest";
 	SQLiteDatabase db;
 	Button btn = null;
 	ListView listView;
@@ -28,7 +30,7 @@ public class DBTest extends ActionBarActivity {
 		// 创建或打开数据库
 		db = SQLiteDatabase.openOrCreateDatabase(this.getFilesDir().toString()
 				+ "/my.db3", null);
-		System.out.println("创建数据库");
+		Log.i(TAG, "创建数据库");
 		listView = (ListView) findViewById(R.id.show);
 		btn = (Button) findViewById(R.id.ok);
 		btn.setOnClickListener(new OnClickListener() {
@@ -50,7 +52,7 @@ public class DBTest extends ActionBarActivity {
 							+ " news_title varchar(50),"
 							+ " news_content varchar(255))");
 					insertData(db, title, content);
-					//执行查询
+					// 执行查询
 					Cursor cursor = db.rawQuery("select * from news_inf", null);
 					inflateList(cursor);
 				}
@@ -69,8 +71,11 @@ public class DBTest extends ActionBarActivity {
 
 	/**
 	 * 填充listView
+	 * 
+	 * @param cursor
 	 */
-	@SuppressLint("NewApi") private void inflateList(Cursor cursor) {
+	@SuppressLint("NewApi")
+	private void inflateList(Cursor cursor) {
 		// 填充SimpleCursorAdapter
 		SimpleCursorAdapter adapter = new SimpleCursorAdapter(DBTest.this,
 				R.layout.line, cursor, new String[] { "news_title",
